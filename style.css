@@ -1,0 +1,23 @@
+
+body{
+    background-color:gray;
+}
+#margen{
+    margin: 20px;
+}
+
+#container{
+    background-color: black;
+    margin: auto;
+    margin-top: 150px;
+    width: 30%;
+    padding: 50px;
+    border-radius: 15px;
+}
+
+body #fondo-login{
+    background-image: url(fondo-login.jpg);
+}
+#recuadro{
+    
+}
