@@ -22,9 +22,9 @@ include "conexion.php";
                 <h1> iniciar sesion</h1>
 
                 <div class="mb-1">
-                    <label for="email" class="form-label"></label>
-                    <input required type="email" id="email" name="email" class="form-control" placeholder="correo electronico" aria-describedby="emailHelp">
-                <div id="email" class="form-text"></div>
+                    <label for="correo" class="form-label"></label>
+                    <input required type="email" id="correo" name="correo" class="form-control" placeholder="correo electronico" aria-describedby="emailHelp">
+                <div id="correo" class="form-text"></div>
 
                 <div class="mb-1">
                     <label for="password" class="form-label"></label>
@@ -45,3 +45,35 @@ include "conexion.php";
 
     </body>
 </html>
+
+<?php
+function comprobar($correo,$contraseña,$cusuarios,$conn){
+    $nuevaURL = "inventario";
+    $result = $conn->query("SELECT * FROM usuarios");    
+    while($datos = $result->fetch_assoc()) {
+
+        if($datos['correo']==$correo){
+            if($datos['contraseña']==$contraseña){
+                ?>
+                    <div class='bg-success text-white border-bottom p-3 text-center fw-bold'>Te has logueado correctamente <br></div>";
+                    <meta http-equiv="refresh" content="0;inventario.php">
+                <?php
+            }else{echo "<div class='bg-danger text-white border-bottom p-3 text-center fw-bold'>El email y/o la contraseña son incorrectas</div>";}
+        }else{ $error= isset($error) ? $error : 0; if($cusuarios == ($error+1)){
+            echo "<div class='bg-danger text-white border-bottom p-3 text-center fw-bold'>El email y/o la contraseña son incorrectas</div>";
+            $error = 0;
+        }else $error++;}
+        }
+    }
+$correo= isset($_POST['correo']) ? $_POST['correo'] : 0;
+$contraseña= isset($_POST['contraseña']) ? $_POST['contraseña'] : 0;
+
+$cusuarios = 0;
+$result = $conn->query("SELECT * FROM usuarios");    
+while($datos = $result->fetch_assoc()) {
+    $cusuarios++;
+}
+if($correo !==0 && $contraseña!==0){
+    comprobar($correo,$contraseña,$cusuarios,$conn);
+}
+?>

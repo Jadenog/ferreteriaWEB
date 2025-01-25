@@ -7,8 +7,8 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="index.php">Inicio</a>
-        <a class="nav-link" href="nosotros.php">Sobre nosotros</a>
-        <a class="nav-link" href="login.php">iniciar sesion</a>
+        <a class="nav-link" href="inventario.php">ver</a>
+        <a class="nav-link" href="gestion-inventario.php">gestionar</a>
         <!-- <a class="nav-link disabled" aria-disabled="true">Disabled</a> -->
       </div>
     </div>
