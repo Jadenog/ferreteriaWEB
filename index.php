@@ -18,45 +18,39 @@ include "conexion.php"
     <div id="margen">  
         <h1> Noticias</h1> 
 
-        <div id="carouselExampleCaptions" class="carousel slide">
-            <div class="carousel-indicators">
+                <div id="carouselExampleCaptions" class="carousel slide">
+                    <div class="carousel-inner">
                 <?php
                     // Consulta para contar los registros en la tabla "noticias"
 
                     $query="SELECT * FROM noticas ORDER BY id";
                     $resultado=mysqli_query($conn,$query);
 
+                    $primeranoticia = mysqli_fetch_array($resultado);
+                    ?>
+                            <div class="carousel-item active">
+                                <img src="<?php echo $primeranoticia['imagen'];?>" class="d-block w-100"  alt="imagen">
+                            </div>
+                    <?php
                     while ($extraido= mysqli_fetch_array($resultado)) { 
-                    
                         ?>
-                        
-                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="<?php $i?>"></button>
-
-                            </div>
-                            <div class="carousel-inner">
-                                <img src="<?php.$extraido['imagen']. ?>" class="d-block w-100" alt="imagen">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5><?php.$extraido['titular']. ?></h5>
+                            <div class="carousel-item">
+                                <img src="<?php echo $extraido['imagen'];?>"class="d-block w-100" alt="noticia">
                             </div>
 
-                        <?php
+                    <?php
                     }
                 ?>
-
- 
-
-                </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
             </div>
-    </div>
-
+        </div>
     </body>
 </html>
