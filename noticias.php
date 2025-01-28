@@ -45,8 +45,7 @@
                         echo"<tr align='center'>";
                         echo "<td>".$extraido['id']."</td>";
                         echo "<td>".$extraido['titular']."</td>";
-                        $imagen=.$extraido['imagen'];
-                        echo "<td>"'<img src='"$imagen'"."</td>";
+                        echo "<td><img src=".$extraido['imagen']." width=125px height=100px></td>";
                         echo "<td>".$extraido['fecha']."</td></tr>";
                     }
                 ?>
