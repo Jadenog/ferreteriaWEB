@@ -14,7 +14,10 @@
         ?>
     <div id="margen">  
         <h1> En donde estamos ubicados</h1> 
-
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d835.7583278056106!2d-75.66256971602287!3d4.845514770973669!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e38811ed5b1bc47%3A0x7c21e61badfe5e18!2sMet%C3%A1licas%20Otalvaro!5e0!3m2!1ses-419!2sco!4v1738367996806!5m2!1ses-419!2sco" 
+            width="600" 
+            height="450" 
+            style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         <h1> Historia</h1> 
         <p>
                     En el corazón de nuestro barrio, hace más de 20 años, nació "Ferretería El Tornillo Dorado", una pequeña tienda con un gran sueño: ser el lugar donde los proyectos comienzan y las ideas se hacen realidad. Inspirados por la pasión de don Jorge Martínez, un carpintero y constructor de toda la vida, abrimos nuestras puertas con la misión de ofrecer no solo herramientas y materiales, sino también soluciones y confianza.
