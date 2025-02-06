@@ -16,7 +16,7 @@ include "conexion.php"
         <?php
             include "barra-navegacion.php"
         ?>
-    <div id="margen">  
+    <div id="margen">
         <h1> Noticias</h1> 
 
                 <div id="carouselExampleCaptions" class="carousel slide">

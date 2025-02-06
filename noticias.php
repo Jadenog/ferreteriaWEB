@@ -1,55 +1,60 @@
-<!-- link donde voy a tomar las noticias: https://www.fierros.com.co/es/noticias?tags=8&items_per_page=9-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>inventario </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css"></link>
-    </title>
+    <title>Inventario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/879e1cefd1.js" crossorigin="anonymous"></script>
 </head>
-    <body>
-        <?php
-            include "barra-navegacion2.php"
-        ?>
+<body>
+    <?php include "barra-navegacion2.php"; ?>
 
-        <div id="margen-inventario" style="margin: 5% 10%">
-        <h1> noticias activas</h1>
-            <div class="mb-3">
-                <a href="gestionar-noticias.php">
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-warning">agregar nueva noticia</button>
-                    </div>
-                </a>
-            </div>
-        <!--tabla -->
-            <table class="table table-dark table-hover table table-bordered">
-                <thead class="table-light">
-                    <tr align='center'>
-                        <th scope="col">id</th>    
-                        <th scope="col">titular</th>
-                        <th scope="col">imagen</th>
-                        <th scope="col">fecha agregada</th>
-                    </tr>
-                </thead>
-                <?php
-
-                    require('conexion.php');
-                    $query="SELECT * FROM noticas ORDER BY id";
-                    $resultado=mysqli_query($conn,$query);
-
-                    while ($extraido= mysqli_fetch_array($resultado)) { 
-
-                        echo"<tr align='center'>";
-                        echo "<td>".$extraido['id']."</td>";
-                        echo "<td>".$extraido['titular']."</td>";
-                        echo "<td><img src=".$extraido['imagen']." width=125px height=100px></td>";
-                        echo "<td>".$extraido['fecha']."</td></tr>";
-                    }
-                ?>
-            
+    <div id="margen-inventario" style="margin: 5% 10%">
+        <h1>Noticias Activas</h1>
+        <div class="mb-3">
+            <a href="gestionar-noticias.php">
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-warning">Agregar Nueva Noticia</button>
+                </div>
+            </a>
         </div>
-    </body>
+
+        <!-- Tabla -->
+        <table class="table table-dark table-hover table-bordered">
+            <thead class="table-light">
+                <tr align='center'>
+                    <th scope="col">ID</th>    
+                    <th scope="col">Titular</th>
+                    <th scope="col">Imagen</th>
+                    <th scope="col">Fecha Agregada</th>
+                    <th scope="col"><i class="fa-regular fa-trash-can"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                require('conexion.php');
+                $query = "SELECT * FROM noticas ORDER BY id";
+                $resultado = mysqli_query($conn, $query);
+
+                while ($extraido = mysqli_fetch_array($resultado)) { 
+                    echo "<tr align='center'>";
+                    echo "<td>".$extraido['id']."</td>";
+                    echo "<td>".$extraido['titular']."</td>";
+                    echo "<td><img src='".$extraido['imagen']."' width='125px' height='100px'></td>";
+                    echo "<td>".$extraido['fecha']."</td>";
+                    echo "<td>
+                            <form action='eliminar.php' method='POST' onsubmit='return confirm(\"¿Seguro que quieres eliminar este registro?\");'>
+                                <input type='hidden' name='id' value='".$extraido['id']."'>
+                                <button type='submit' class='btn btn-danger'>Eliminar</button>
+                            </form>
+                          </td>";
+                    echo "</tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</body>
 </html>
