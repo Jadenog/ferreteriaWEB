@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <script src="https://kit.fontawesome.com/879e1cefd1.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-    <?php include "barra-navegacion2.php"; ?>
+    <?php include "barra-navegacion-admin.php"; ?>
 
     <div id="margen-inventario" style="margin: 5% 10%">
         <h1>Inventario</h1>
@@ -54,7 +54,7 @@
                     </tr>
                 </thead>
                 <?php
-                    require('conexion.php');
+                    require('../conexion.php');
 
                     $numPagina = 10;
                     $pagina = isset($_GET["page"]) ? (int)$_GET["page"] : 1;

@@ -22,9 +22,9 @@ include "conexion.php";
                 <h1> iniciar sesion</h1>
 
                 <div class="mb-1">
-                    <label for="correo" class="form-label"></label>
-                    <input required type="email" id="correo" name="correo" class="form-control" placeholder="correo electronico" aria-describedby="emailHelp">
-                <div id="correo" class="form-text"></div>
+                    <label for="usuario" class="form-label"></label>
+                    <input required type="text" id="usuario" name="usuario" class="form-control" placeholder="usuario" aria-describedby="emailHelp">
+                <div id="usuario" class="form-text"></div>
 
                 <div class="mb-1">
                     <label for="password" class="form-label"></label>
@@ -47,17 +47,30 @@ include "conexion.php";
 </html>
 
 <?php
-function comprobar($correo,$contraseña,$cusuarios,$conn){
+function comprobar($usuario,$contraseña,$cusuarios,$conn){
     $nuevaURL = "inventario";
     $result = $conn->query("SELECT * FROM usuarios");    
     while($datos = $result->fetch_assoc()) {
 
-        if($datos['correo']==$correo){
+        if($datos['usuario']==$usuario){
             if($datos['contraseña']==$contraseña){
-                ?>
-                    <div class='bg-success text-white border-bottom p-3 text-center fw-bold'>Te has logueado correctamente <br></div>";
-                    <meta http-equiv="refresh" content="0;inventario.php">
-                <?php
+                if($datos['id_cargo']== 1){
+                    ?>
+                        <div class='bg-success text-white border-bottom p-3 text-center fw-bold'>Te has logueado correctamente <br></div>";
+                        <meta http-equiv="refresh" content="0;admin/gestion-inventario.php">
+                    <?php
+
+                }else{
+                    if(($datos['id_cargo']== 2)){
+                        
+                        ?>
+                            <div class='bg-success text-white border-bottom p-3 text-center fw-bold'>Te has logueado correctamente <br></div>";
+                            <meta http-equiv="refresh" content="0;client/inventario.php">
+                         <?php
+                    }
+                }
+
+                
             }else{echo "<div class='bg-danger text-white border-bottom p-3 text-center fw-bold'>El email y/o la contraseña son incorrectas</div>";}
         }else{ $error= isset($error) ? $error : 0; if($cusuarios == ($error+1)){
             echo "<div class='bg-danger text-white border-bottom p-3 text-center fw-bold'>El email y/o la contraseña son incorrectas</div>";
@@ -65,7 +78,7 @@ function comprobar($correo,$contraseña,$cusuarios,$conn){
         }else $error++;}
         }
     }
-$correo= isset($_POST['correo']) ? $_POST['correo'] : 0;
+$usuario= isset($_POST['usuario']) ? $_POST['usuario'] : 0;
 $contraseña= isset($_POST['contraseña']) ? $_POST['contraseña'] : 0;
 
 $cusuarios = 0;
@@ -73,7 +86,7 @@ $result = $conn->query("SELECT * FROM usuarios");
 while($datos = $result->fetch_assoc()) {
     $cusuarios++;
 }
-if($correo !==0 && $contraseña!==0){
-    comprobar($correo,$contraseña,$cusuarios,$conn);
+if($usuario !==0 && $contraseña!==0){
+    comprobar($usuario,$contraseña,$cusuarios,$conn);
 }
 ?>
