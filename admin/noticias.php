@@ -30,6 +30,7 @@
                     <th scope="col">Imagen</th>
                     <th scope="col">Fecha Agregada</th>
                     <th scope="col"><i class="fa-regular fa-trash-can"></i></th>
+                    <th scope="col"><i class="fa-solid fa-gear"></i></th>
                 </tr>
             </thead>
             <tbody>
@@ -49,6 +50,9 @@
                                 <input type='hidden' name='id' value='".$extraido['id']."'>
                                 <button type='submit' class='btn btn-danger'>Eliminar</button>
                             </form>
+                          </td>";
+                    echo "<td>
+                            <a href='editar.php?id=".$extraido['id']."' class='btn btn-warning'>Editar</a>
                           </td>";
                     echo "</tr>";
                 }

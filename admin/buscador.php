@@ -1,5 +1,5 @@
 <?php
-require('conexion.php');
+require('../conexion.php');
 
 $buscar = isset($_POST['buscar']) ? trim($_POST['buscar']) : '';
 
