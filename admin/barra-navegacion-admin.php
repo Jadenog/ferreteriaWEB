@@ -11,8 +11,8 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link <?=($pagina_actual =='../index.php') ? 'active' : '' ?>"  href="../index.php">Inicio</a>
-        <a class="nav-link <?=($pagina_actual =='inventario.php') ? 'active' : '' ?>" href="inventario.php">ver</a>
-        <a class="nav-link <?=($pagina_actual =='gestion-inventario.php') ? 'active' : '' ?>" href="gestion-inventario.php">gestionar</a>
+        <a class="nav-link <?=($pagina_actual =='inventario.php' || $pagina_actual == 'editar_producto.php') ? 'active' : '' ?>" href="inventario.php">productos</a>
+        <a class="nav-link <?=($pagina_actual =='gestion-inventario.php') ? 'active' : '' ?>" href="gestion-inventario.php">añadir producto</a>
         <a class="nav-link <?=($pagina_actual =='noticias.php' || $pagina_actual == 'editar.php' || $pagina_actual == 'gestionar-noticias.php') ? 'active' : '' ?>" href="noticias.php">Noticias</a>
         <!-- <a class="nav-link disabled" aria-disabled="true">Disabled</a> -->
       </div>

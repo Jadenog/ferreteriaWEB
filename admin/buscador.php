@@ -28,6 +28,8 @@ if ($buscar != '') {
                         <th scope='col'>Marca</th>
                         <th scope='col'>Cantidad</th>
                         <th scope='col'>Precio</th>
+                        <th scope='col'><i class='fa-regular fa-trash-can'></i></th>
+                        <th scope='col'><i class='fa-solid fa-gear'></i></th>
                     </tr>
                 </thead>";
 
@@ -45,6 +47,16 @@ if ($buscar != '') {
             echo "<td>" . resaltar_frase($fila['marca'], $buscar) . "</td>";
             echo "<td>" . $fila['cantidad'] . "</td>";
             echo "<td>" . $fila['precio'] . "</td>";
+            echo "<td>
+            <form action='eliminar_producto.php' method='POST' onsubmit='return confirm(\"¿Seguro que quieres eliminar este registro?\");'>
+                <input type='hidden' name='id' value='".$fila['id']."'>
+                <button type='submit' class='btn btn-danger'>Eliminar</button>
+            </form>
+          </td>";
+    echo "<td>
+            <a href='editar_producto.php?id=".$fila['id']."' class='btn btn-warning'>Editar</a>
+          </td>";
+    echo "</tr>";
             echo "</tr>";
         }
         echo "</table>";
