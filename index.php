@@ -18,7 +18,7 @@ include "conexion.php"
         ?>
     <div id="margen">
         <h1> Noticias</h1> 
-
+                <div class="mx-auto" style="width: 1000px;">
                 <div id="carouselExampleCaptions" class="carousel slide">
                     <div class="carousel-inner">
                 <?php
@@ -47,6 +47,7 @@ include "conexion.php"
                                 <div class="carousel-caption d-none d-md-block">
                                     <h2><?php echo $noticias['titular'];?></h2>
                                 </div>
+                                
                             </div>
                             <?php
                         }
@@ -63,6 +64,7 @@ include "conexion.php"
                 <span class="visually-hidden">Next</span>
             </button>
             </div>
+        </div>
         </div>
     </body>
 </html>
