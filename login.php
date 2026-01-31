@@ -1,92 +1,109 @@
 <?php
-include "conexion.php";
+session_start();
+require_once "conexion.php";
+
+// Si ya está logueado, redirigir directamente
+if (isset($_SESSION['id'])) {
+    if ($_SESSION['id_cargo'] == 1) {
+        header("Location: admin/inventario.php");
+        exit;
+    } else {
+        header("Location: client/inventario.php");
+        exit;
+    }
+}
+
+$error = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    $usuario = $_POST['usuario'] ?? '';
+    $contrasena = $_POST['contraseña'] ?? '';
+
+    $usuario = trim($usuario);
+    $contrasena = trim($contrasena);
+
+    // Buscar usuario en BD
+    $stmt = $conn->prepare("SELECT id, nombre, correo, usuario, contraseña, id_cargo FROM usuarios WHERE usuario = ? LIMIT 1");
+    $stmt->bind_param("s", $usuario);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) {
+        $datos = $result->fetch_assoc();
+
+        // Comparación directa (si tu BD guarda contraseña en texto plano)
+        if ($datos['contraseña'] === $contrasena) {
+
+            // Guardar sesión
+            $_SESSION['id'] = $datos['id'];
+            $_SESSION['nombre'] = $datos['nombre'];
+            $_SESSION['correo'] = $datos['correo'];
+            $_SESSION['usuario'] = $datos['usuario'];
+            $_SESSION['id_cargo'] = $datos['id_cargo'];
+
+            // Redirección según cargo
+            if ($datos['id_cargo'] == 1) {
+                header("Location: admin/inventario.php");
+                exit;
+            } else {
+                header("Location: client/inventario.php");
+                exit;
+            }
+
+        } else {
+            $error = "Usuario o contraseña incorrectos.";
+        }
+    } else {
+        $error = "Usuario o contraseña incorrectos.";
+    }
+}
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iniciar sesion</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css"></link>
-    </title>
+    <title>Iniciar sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-    <body>
-        <?php
-            include "barra-navegacion.php"
-        ?>
 
-        <div id="container">
-            <div id="recuadro">
-            <form action="login.php" method="POST">
-                <h1> iniciar sesion</h1>
+<body>
+<?php include "barra-navegacion.php"; ?>
 
-                <div class="mb-1">
-                    <label for="usuario" class="form-label"></label>
-                    <input required type="text" id="usuario" name="usuario" class="form-control" placeholder="usuario" aria-describedby="emailHelp">
-                <div id="usuario" class="form-text"></div>
+<div class="container mt-5" style="max-width: 450px;">
+    <div class="card bg-dark text-white p-4">
+        <h3 class="text-center mb-3">Iniciar sesión</h3>
 
-                <div class="mb-1">
-                    <label for="password" class="form-label"></label>
-                    <input required type="password" id="contraseña" name="contraseña" class="form-control" placeholder="contraseña" aria-describedby="emailHelp">
-                <div id="contraseña" class="form-text"></div>
-
-                <div class="mt-3">
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-warning btn-lg">iniciar sesion</button>
-                    </div>
-                </div>
-            </form>
-                <div class="mt-4"> 
-                    <p style="color: white;" >aun no te has registrado ? <a href="registrar.php">registrarme</a></p>
-                </div>
+        <?php if ($error != "") { ?>
+            <div class="alert alert-danger text-center fw-bold">
+                <?= $error ?>
             </div>
+        <?php } ?>
+
+        <form action="login.php" method="POST">
+            <div class="mb-3">
+                <input required type="text" name="usuario" class="form-control" placeholder="Usuario">
+            </div>
+
+            <div class="mb-3">
+                <input required type="password" name="contraseña" class="form-control" placeholder="Contraseña">
+            </div>
+
+            <button type="submit" class="btn btn-warning w-100 fw-bold">
+                Iniciar sesión
+            </button>
+        </form>
+
+        <div class="mt-3 text-center">
+            <p class="text-white">
+                ¿Aún no tienes cuenta? <a href="registrar.php">Registrarme</a>
+            </p>
         </div>
+    </div>
+</div>
 
-    </body>
+</body>
 </html>
-
-<?php
-function comprobar($usuario,$contraseña,$cusuarios,$conn){
-    $nuevaURL = "inventario";
-    $result = $conn->query("SELECT * FROM usuarios");    
-    while($datos = $result->fetch_assoc()) {
-
-        if($datos['usuario']==$usuario){
-            if($datos['contraseña']==$contraseña){
-                if($datos['id_cargo']== 1){
-                    ?>
-                        <div class='bg-success text-white border-bottom p-3 text-center fw-bold'>Te has logueado correctamente <br></div>";
-                        <meta http-equiv="refresh" content="0;admin/gestion-inventario.php">
-                    <?php
-
-                }else{
-                    if(($datos['id_cargo']== 2)){
-                        
-                        ?>
-                            <div class='bg-success text-white border-bottom p-3 text-center fw-bold'>Te has logueado correctamente <br></div>";
-                            <meta http-equiv="refresh" content="0;client/inventario.php">
-                         <?php
-                    }
-                }
-
-                
-            }else{echo "<div class='bg-danger text-white border-bottom p-3 text-center fw-bold'>El email y/o la contraseña son incorrectas</div>";}
-        }else{ $error= isset($error) ? $error : 0; if($cusuarios == ($error+1)){
-            echo "<div class='bg-danger text-white border-bottom p-3 text-center fw-bold'>El email y/o la contraseña son incorrectas</div>";
-            $error = 0;
-        }else $error++;}
-        }
-    }
-$usuario= isset($_POST['usuario']) ? $_POST['usuario'] : 0;
-$contraseña= isset($_POST['contraseña']) ? $_POST['contraseña'] : 0;
-
-$cusuarios = 0;
-$result = $conn->query("SELECT * FROM usuarios");    
-while($datos = $result->fetch_assoc()) {
-    $cusuarios++;
-}
-if($usuario !==0 && $contraseña!==0){
-    comprobar($usuario,$contraseña,$cusuarios,$conn);
-}
-?>

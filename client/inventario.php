@@ -12,7 +12,9 @@
 </head>
 
 <body>
-    <?php include "barra-navegacion2.php"; ?>
+    <?php include "barra-navegacion2.php"; 
+    include "auth-cliente.php";
+    ?>
 
     <div id="margen-inventario" style="margin: 5% 10%">
         <h1>Inventario</h1>
@@ -89,7 +91,7 @@
 
                             // Si cantidad es 0, deshabilita checkbox y apaga fila
                             $disabled = ($cantidad <= 0) ? 'disabled' : '';
-                            //$claseFila = ($cantidad <= 0) ? 'table-secondary text-muted' : '';
+                            
                     ?>
                             <tr align='center' class="<?= $claseFila ?>">
                                 <td>

@@ -21,7 +21,9 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-<?php include "barra-navegacion-admin.php"; ?>
+<?php include "barra-navegacion-admin.php";
+    include "auth-admin.php";
+?>
     <div id="container">
         <div id="recuadro">
             <div class="container mt-5">

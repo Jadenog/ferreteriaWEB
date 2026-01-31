@@ -10,7 +10,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-    <?php include "barra-navegacion-admin.php"; ?>
+    <?php include "barra-navegacion-admin.php";
+    include "auth-admin.php";
+    ?>
 
     <div id="margen-inventario" style="margin: 5% 10%">
         <h1>Inventario</h1>

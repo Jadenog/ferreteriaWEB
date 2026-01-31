@@ -9,7 +9,9 @@
     <script src="https://kit.fontawesome.com/879e1cefd1.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <?php include "barra-navegacion-admin.php"; ?>
+    <?php include "barra-navegacion-admin.php"; 
+    include "auth-admin.php";
+    ?>
 
     <div id="margen-inventario" style="margin: 5% 10%">
         <h1>Noticias Activas</h1>

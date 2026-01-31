@@ -14,7 +14,8 @@
 </head>
     <body>
         <?php
-            include "barra-navegacion-admin.php"
+            include "barra-navegacion-admin.php";
+            include "auth-admin.php";
         ?>
         <div id="container">
             <div id="recuadro">
