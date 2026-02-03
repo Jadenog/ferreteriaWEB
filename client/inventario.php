@@ -12,7 +12,8 @@
 </head>
 
 <body>
-    <?php include "barra-navegacion2.php"; 
+    <?php 
+    include "barra-navegacion2.php"; 
     include "auth-cliente.php";
     ?>
 

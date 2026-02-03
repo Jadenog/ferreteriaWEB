@@ -1,8 +1,13 @@
 <?php
 require('../conexion.php');
-
+ include "barra-navegacion2.php"; 
+    include "auth-cliente.php";
+// mensaje de error si no se seleccionó ningún producto
 if (!isset($_POST['productos']) || count($_POST['productos']) == 0) {
-    echo "<h3>No seleccionaste ningún producto.</h3>";
+    echo "<script>
+                alert('No seleccionaste ningún producto para comprar');
+                window.location.href = 'inventario.php';
+              </script>";
     echo "<a href='inventario.php'>Volver</a>";
     exit;
 }
@@ -26,13 +31,18 @@ $resultado = mysqli_query($conn, $query);
     <title>Compra</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
+<!-- aviso Confirmar compra -->
+<script> 
+    function confirmarCompra(){
+    return confirm("¿Estás seguro de confirmar la compra?");
+}
+</script>
 <body class="bg-dark text-white">
 
 <div class="container mt-5">
     <h2>Productos seleccionados</h2>
 
-    <form action="confirmar_compra.php" method="POST">
+    <form action="confirmar_compra.php" method="POST" onsubmit="return confirmarCompra();">
         <table class="table table-dark table-bordered mt-4">
             <thead class="table-light">
                 <tr align="center">
@@ -84,6 +94,7 @@ $resultado = mysqli_query($conn, $query);
 
         <div class="d-flex gap-2">
             <a href="inventario.php" class="btn btn-warning">Volver</a>
+            
             <button type="submit" class="btn btn-success">Confirmar compra</button>
         </div>
     </form>
@@ -119,6 +130,8 @@ recalcularTotal();
 document.querySelectorAll(".cantidad-input").forEach(input => {
     input.addEventListener("input", recalcularTotal);
 });
+
+
 </script>
 
 </body>
