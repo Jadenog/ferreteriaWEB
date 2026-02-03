@@ -4,7 +4,7 @@ require('../conexion.php');
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Obtener los datos de la noticia
+    // Obtener los datos del producto
     $query = "SELECT * FROM productos WHERE id = $id";
     $resultado = mysqli_query($conn, $query);
     $producto = mysqli_fetch_array($resultado);
