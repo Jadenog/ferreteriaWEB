@@ -3,47 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario</title>
+    <title>Inventario Admin</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
     <script src="https://kit.fontawesome.com/879e1cefd1.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
+
 <body>
-    <?php include "barra-navegacion-admin.php";
+<?php 
+    include "barra-navegacion-admin.php";
     include "auth-admin.php";
-    ?>
+    require('../conexion.php');
+?>
 
-    <div id="margen-inventario" style="margin: 5% 10%">
-        <h1>Inventario</h1>
+<div id="margen-inventario" style="margin: 5% 10%">
+    <h1>Inventario</h1>
 
-        <!-- Buscador -->
-        <div class="mb-4">
-            <form class="d-flex" onsubmit="return false;">
-                <input onkeyup="buscar_ahora();" class="form-control me-2" type="search" id="search" placeholder="Buscar producto">
-                <button class="btn btn-warning" onclick="buscar_ahora();">Buscar</button>
-            </form>
-        </div>  
+    <!-- Buscador -->
+    <div class="mb-4">
+        <form class="d-flex" onsubmit="return false;">
+            <input onkeyup="buscar_ahora();" class="form-control me-2" type="search" id="search" placeholder="Buscar producto">
+            <button class="btn btn-warning" onclick="buscar_ahora();">Buscar</button>
+        </form>
+    </div>
 
-        <script>
-            function buscar_ahora(){
-                var buscar = $("#search").val();
-                $.ajax({
-                    type: 'POST',
-                    url: 'buscador.php',
-                    data: { buscar: buscar },
-                    success: function(data){
-                        $("#datos_buscador").html(data);
+    <script>
+        function buscar_ahora(){
+            var buscar = $("#search").val();
+            $.ajax({
+                type: 'POST',
+                url: 'buscador.php',
+                data: { buscar: buscar },
+                success: function(data){
+                    $("#datos_buscador").html(data);
+
+                    // Ocultar tabla completa cuando hay búsqueda
+                    if (buscar.trim() !== "") {
+                        $("#tabla_inventario").hide();
+                    } else {
+                        $("#tabla_inventario").show();
                     }
-                });
-            }
-        </script>
+                }
+            });
+        }
+    </script>
 
-        <!-- Resultados de búsqueda -->
-        <div id="datos_buscador"></div>
+    <!-- Resultados de búsqueda -->
+    <div id="datos_buscador"></div>
 
-        <!-- Tabla completa (solo se muestra si no hay búsqueda activa) -->
-        <div id="tabla_inventario">
+    <!-- Tabla completa -->
+    <div id="tabla_inventario">
+
+        <!-- FORM PRINCIPAL SOLO PARA COMPRAR -->
+        <form action="comprar.php" method="POST" id="formComprar">
+
             <table class="table table-dark table-hover table-bordered">
                 <thead class="table-light">
                     <tr align='center'>
@@ -57,9 +72,9 @@
                         <th scope="col"><i class="fa-solid fa-gear"></i></th>
                     </tr>
                 </thead>
-                <?php
-                    require('../conexion.php');
 
+                <tbody>
+                <?php
                     $numPagina = 10;
                     $pagina = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
                     if ($pagina < 1) $pagina = 1;
@@ -73,58 +88,80 @@
                     $query = "SELECT * FROM productos ORDER BY id LIMIT $inicio, $numPagina";
                     $resultado = mysqli_query($conn, $query);
 
-                    while ($extraido = mysqli_fetch_array($resultado)) { 
-                        ?>
-                        <tr align='center'>
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </td>
-                            <?php
-                            echo "<td>".$extraido['id']."</td>";
-                            echo "<td>".$extraido['producto']."</td>";
-                            echo "<td>".$extraido['marca']."</td>";
-                            echo "<td>".$extraido['cantidad']."</td>";
-                            echo "<td>".$extraido['precio']."</td>";
-                            echo "<td>
-                            <form action='eliminar_producto.php' method='POST' onsubmit='return confirm(\"¿Seguro que quieres eliminar este registro?\");'>
-                                <input type='hidden' name='id' value='".$extraido['id']."'>
-                                <button type='submit' class='btn btn-danger'>Eliminar</button>
-                            </form>
-                          </td>";
-                    echo "<td>
-                            <a href='editar_producto.php?id=".$extraido['id']."' class='btn btn-warning'>Editar</a>
-                          </td>";
-                    echo "</tr>";
-                        }
+                    while ($extraido = mysqli_fetch_assoc($resultado)) { 
+                        $cantidad = (int)$extraido['cantidad'];
+                        $disabled = ($cantidad <= 0) ? 'disabled' : '';
+                        $id = $extraido['id'];
                 ?>
+                    <tr align="center">
+                        <td>
+                            <div class="form-check d-flex justify-content-center">
+                                <input 
+                                    class="form-check-input" 
+                                    type="checkbox"
+                                    name="productos[]"
+                                    value="<?= $id ?>"
+                                    <?= $disabled ?>
+                                >
+                            </div>
+                        </td>
+
+                        <td><?= $id ?></td>
+                        <td><?= $extraido['producto'] ?></td>
+                        <td><?= $extraido['marca'] ?></td>
+                        <td><?= $extraido['cantidad'] ?></td>
+                        <td><?= $extraido['precio'] ?></td>
+
+                        <!-- ELIMINAR (FORM INDEPENDIENTE, NO ANIDADO) -->
+                        <td>
+                            <form id="formEliminar<?= $id ?>" action="eliminar_producto.php" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar este registro?');">
+                                <input type="hidden" name="id" value="<?= $id ?>">
+                            </form>
+
+                            <button type="submit" form="formEliminar<?= $id ?>" class="btn btn-danger">
+                                Eliminar
+                            </button>
+                        </td>
+
+                        <!-- EDITAR -->
+                        <td>
+                            <a href="editar_producto.php?id=<?= $id ?>" class="btn btn-warning">Editar</a>
+                        </td>
+                    </tr>
+                <?php } ?>
+                </tbody>
             </table>
-        </div>
 
-        <!-- Paginación -->
-        <nav>
-            <ul class="pagination justify-content-center">
-                <li class="page-item <?= ($pagina <= 1) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=<?= $pagina - 1 ?>">Atrás</a>
-                </li>
-                
-                <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
-                    <li class="page-item <?= ($pagina == $i) ? 'active' : '' ?>">
-                        <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                    </li>
-                <?php endfor; ?>
+            <!-- Botón comprar (DENTRO DEL FORM) -->
+            <div class="d-grid gap-2 mb-4">
+                <button type="submit" class="btn btn-warning">
+                    Comprar
+                </button>
+            </div>
 
-                <li class="page-item <?= ($pagina >= $totalPaginas) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?page=<?= $pagina + 1 ?>">Siguiente</a>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Botón comprar -->
-        <div class="d-grid gap-2">
-            <button type="button" class="btn btn-warning">Comprar</button>
-        </div>
+        </form>
     </div>
+
+    <!-- Paginación -->
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item <?= ($pagina <= 1) ? 'disabled' : '' ?>">
+                <a class="page-link" href="?page=<?= $pagina - 1 ?>">Atrás</a>
+            </li>
+
+            <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+                <li class="page-item <?= ($pagina == $i) ? 'active' : '' ?>">
+                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                </li>
+            <?php endfor; ?>
+
+            <li class="page-item <?= ($pagina >= $totalPaginas) ? 'disabled' : '' ?>">
+                <a class="page-link" href="?page=<?= $pagina + 1 ?>">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
 </body>
 </html>
